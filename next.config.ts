@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "picsum.photos",
       },
+      {
+        // Cloudflare R2 public buckets (pub-<hash>.r2.dev). If you attach a
+        // custom domain to the bucket, add that hostname here too.
+        protocol: "https",
+        hostname: "**.r2.dev",
+      },
     ],
   },
 };
