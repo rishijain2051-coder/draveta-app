@@ -1,5 +1,5 @@
 import { db } from "./db";
-import type { AccountTier } from "@prisma/client";
+import type { AccountTier } from "@/lib/enums";
 
 type PriceResult = {
   unitPrice: number;

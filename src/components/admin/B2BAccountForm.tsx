@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 
 const accountSchema = z.object({
   tier: z.nativeEnum(AccountTier),
-  discountPercentage: z.coerce.number().min(0).max(100),
+  discountPercentage: z.number().min(0).max(100),
   status: z.nativeEnum(UserStatus),
 });
 
@@ -94,7 +94,14 @@ export function B2BAccountForm({ initialData }: { initialData: any }) {
             <FormItem>
               <FormLabel>Global Discount Percentage (%)</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" min="0" max="100" {...field} />
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="100"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

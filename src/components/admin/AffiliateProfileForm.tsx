@@ -21,8 +21,8 @@ import { useRouter } from "next/navigation";
 
 const profileSchema = z.object({
   uniqueCode: z.string().min(3),
-  discountPercent: z.coerce.number().min(0).max(100),
-  commissionPercent: z.coerce.number().min(0).max(100),
+  discountPercent: z.number().min(0).max(100),
+  commissionPercent: z.number().min(0).max(100),
   status: z.nativeEnum(UserStatus),
 });
 
@@ -86,7 +86,12 @@ export function AffiliateProfileForm({ initialData }: { initialData: any }) {
             <FormItem>
               <FormLabel>Customer Discount (%)</FormLabel>
               <FormControl>
-                <Input type="number" step="0.5" {...field} />
+                <Input
+                  type="number"
+                  step="0.5"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -100,7 +105,12 @@ export function AffiliateProfileForm({ initialData }: { initialData: any }) {
             <FormItem>
               <FormLabel>Affiliate Commission (%)</FormLabel>
               <FormControl>
-                <Input type="number" step="0.5" {...field} />
+                <Input
+                  type="number"
+                  step="0.5"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

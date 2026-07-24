@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 const { auth } = NextAuth(authConfig);
 
 export default auth((request) => {
-  // On Vercel, the country is available in the geo object or headers
-  const country = request.geo?.country || request.headers.get("x-vercel-ip-country") || "IN";
+  // Next.js removed request.geo; on Vercel the country arrives as a request header.
+  const country = request.headers.get("x-vercel-ip-country") || "IN";
   
   // Set the country header for the server components to read
   const response = NextResponse.next();

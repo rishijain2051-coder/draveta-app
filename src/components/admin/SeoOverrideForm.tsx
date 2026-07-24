@@ -31,7 +31,7 @@ type SeoOverrideFormValues = z.infer<typeof seoOverrideSchema>;
 interface SeoOverrideFormProps {
   initialData?: any;
   onSuccess?: () => void;
-  trigger?: React.ReactNode;
+  trigger?: React.ReactElement;
 }
 
 export function SeoOverrideForm({ initialData, onSuccess, trigger }: SeoOverrideFormProps) {

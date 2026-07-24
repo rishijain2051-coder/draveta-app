@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { z } from "zod";
-import { AccountTier } from "@prisma/client";
+import { AccountTier } from "@/lib/enums";
 
 const tierSchema = z.object({
   tier: z.nativeEnum(AccountTier),

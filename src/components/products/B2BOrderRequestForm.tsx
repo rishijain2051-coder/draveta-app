@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ShoppingCart } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { formatCurrency } from "@/lib/utils"; // Wait, I don't have formatCurrency. I will format inline.
 
-export function B2BOrderRequestForm({ 
+type TierPricing = { minQty: number; maxQty: number | null; unitPrice: number };
+
+export function B2BOrderRequestForm({
   productId, 
   basePrice,
   tier,
@@ -21,44 +22,39 @@ export function B2BOrderRequestForm({
 }) {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [tiers, setTiers] = useState<any[]>([]);
-  const [unitPrice, setUnitPrice] = useState(basePrice);
+  const [tiers, setTiers] = useState<TierPricing[]>([]);
 
   useEffect(() => {
     fetch(`/api/b2b/pricing?productId=${productId}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.tiers) {
           setTiers(data.tiers);
         }
       });
   }, [productId]);
 
-  useEffect(() => {
-    // Calculate price based on current quantity
-    let currentPrice = basePrice;
-    
-    // Check breakpoints
-    if (tiers.length > 0) {
-      const match = [...tiers].reverse().find(t => quantity >= t.minQty);
-      if (match) {
-        currentPrice = match.unitPrice;
-      }
-    } else if (discountPercentage > 0) {
-      currentPrice = basePrice * (1 - discountPercentage / 100);
+  // Unit price is fully derived from quantity/tiers/discount — compute during
+  // render rather than storing it in state and syncing via an effect.
+  let unitPrice = basePrice;
+  if (tiers.length > 0) {
+    const match = [...tiers].reverse().find((t) => quantity >= t.minQty);
+    if (match) {
+      unitPrice = Number(match.unitPrice);
     }
-    
-    setUnitPrice(currentPrice);
-  }, [quantity, tiers, basePrice, discountPercentage]);
+  } else if (discountPercentage > 0) {
+    unitPrice = basePrice * (1 - discountPercentage / 100);
+  }
 
   const handleAddToOrder = async () => {
     try {
       setLoading(true);
       
       const cartStr = localStorage.getItem("b2b_cart");
-      const cart = cartStr ? JSON.parse(cartStr) : [];
-      
-      const existingItem = cart.find((i: any) => i.productId === productId);
+      const cart: Array<{ productId: string; quantity: number; unitPrice: number }> =
+        cartStr ? JSON.parse(cartStr) : [];
+
+      const existingItem = cart.find((i) => i.productId === productId);
       if (existingItem) {
         existingItem.quantity += quantity;
         existingItem.unitPrice = unitPrice; // update price just in case

@@ -12,7 +12,11 @@ function Dialog({ ...props }: DialogPrimitive.Root.Props) {
 }
 
 function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
-  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
+  // No `data-slot` here on purpose: when a Button (which stamps its own
+  // data-slot="button") is passed via `render`, two competing data-slot values
+  // resolve differently on the server vs the client and cause a hydration
+  // mismatch. Let the rendered element own the attribute.
+  return <DialogPrimitive.Trigger {...props} />
 }
 
 function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {

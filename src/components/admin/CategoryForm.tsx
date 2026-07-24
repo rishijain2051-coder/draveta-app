@@ -22,7 +22,7 @@ const categorySchema = z.object({
   name: z.string().min(2, "Name is required"),
   slug: z.string().min(2, "Slug is required"),
   imageUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-  displayOrder: z.coerce.number().int().default(0),
+  displayOrder: z.number().int(),
 });
 
 type CategoryFormValues = z.infer<typeof categorySchema>;
@@ -30,7 +30,7 @@ type CategoryFormValues = z.infer<typeof categorySchema>;
 interface CategoryFormProps {
   initialData?: any;
   onSuccess?: () => void;
-  trigger?: React.ReactNode;
+  trigger?: React.ReactElement;
 }
 
 export function CategoryForm({ initialData, onSuccess, trigger }: CategoryFormProps) {
@@ -150,7 +150,11 @@ export function CategoryForm({ initialData, onSuccess, trigger }: CategoryFormPr
                 <FormItem>
                   <FormLabel>Display Order</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

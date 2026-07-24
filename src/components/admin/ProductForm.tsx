@@ -30,13 +30,13 @@ const productSchema = z.object({
   slug: z.string().min(2, "Slug is required"),
   description: z.string().optional(),
   categoryId: z.string().min(1, "Category is required"),
-  basePrice: z.coerce.number().min(0, "Price must be positive"),
+  basePrice: z.number().min(0, "Price must be positive"),
   amazonUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   etsyUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   ogImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT"),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -185,7 +185,12 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
                   <FormItem>
                     <FormLabel>Base Price (₹)</FormLabel>
                     <FormControl>
-                      <Input type="number" step="0.01" {...field} />
+                      <Input
+                        type="number"
+                        step="0.01"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

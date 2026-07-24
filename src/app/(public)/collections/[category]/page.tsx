@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
 
   return {
     title: `${categoryData.name} - Draveta Furniture`,
-    description: categoryData.description || `Browse our ${categoryData.name} collection.`,
+    description: `Browse our ${categoryData.name} collection.`,
   };
 }
 
@@ -63,9 +63,6 @@ export default async function CategoryPage({
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight mb-2">{categoryData.name}</h1>
-          {categoryData.description && (
-            <p className="text-muted-foreground max-w-2xl">{categoryData.description}</p>
-          )}
         </div>
 
         {/* Basic Sort Dropdown (Server Component logic via links for simplicity, in a real app this might be a Client Component using router.push) */}

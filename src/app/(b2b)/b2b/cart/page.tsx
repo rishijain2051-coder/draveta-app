@@ -49,8 +49,10 @@ export default function B2BCartPage() {
           body: JSON.stringify({ ids: cart.map(i => i.productId) })
         });
         
-        const data = await res.json();
-        const productsMap = new Map(data.products.map((p: any) => [p.id, p]));
+        const data: {
+          products: Array<{ id: string; name: string; ogImage: string | null }>;
+        } = await res.json();
+        const productsMap = new Map(data.products.map((p) => [p.id, p] as const));
 
         const hydrated = cart.map(item => ({
           ...item,

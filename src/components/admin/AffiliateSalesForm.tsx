@@ -22,8 +22,8 @@ import { useRouter } from "next/navigation";
 const salesSchema = z.object({
   period: z.string().min(1, "Period is required"),
   platform: z.nativeEnum(Platform),
-  redemptionCount: z.coerce.number().min(0),
-  revenue: z.coerce.number().min(0),
+  redemptionCount: z.number().min(0),
+  revenue: z.number().min(0),
 });
 
 type SalesFormValues = z.infer<typeof salesSchema>;
@@ -116,7 +116,12 @@ export function AffiliateSalesForm({ affiliateId, commissionPercent }: { affilia
               <FormItem>
                 <FormLabel>Redemptions</FormLabel>
                 <FormControl>
-                  <Input type="number" min="0" {...field} />
+                  <Input
+                    type="number"
+                    min="0"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -130,7 +135,13 @@ export function AffiliateSalesForm({ affiliateId, commissionPercent }: { affilia
               <FormItem>
                 <FormLabel>Total Revenue (INR)</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.01" min="0" {...field} />
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

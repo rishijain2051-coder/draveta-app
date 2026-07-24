@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { z } from "zod";
-import { BusinessType } from "@prisma/client";
+import { BusinessType } from "@/lib/enums";
 
 const b2bApplicationSchema = z.object({
   companyName: z.string().min(2),
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("B2B Application Error:", error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Validation failed", details: error.errors }, { status: 400 });
+      return NextResponse.json({ error: "Validation failed", details: error.issues }, { status: 400 });
     }
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
