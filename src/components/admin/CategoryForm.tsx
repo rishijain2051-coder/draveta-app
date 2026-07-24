@@ -86,9 +86,7 @@ export function CategoryForm({ initialData, onSuccess, trigger }: CategoryFormPr
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || <Button>Create Category</Button>}
-      </DialogTrigger>
+      <DialogTrigger render={trigger || <Button>Create Category</Button>} />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>

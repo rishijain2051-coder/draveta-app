@@ -80,9 +80,7 @@ export function SeoOverrideForm({ initialData, onSuccess, trigger }: SeoOverride
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || <Button>Add Override</Button>}
-      </DialogTrigger>
+      <DialogTrigger render={trigger || <Button>Add Override</Button>} />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
