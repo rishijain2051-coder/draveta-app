@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { AccountTier, UserStatus } from "@prisma/client";
+import { AccountTier, UserStatus } from "@/lib/enums";
 import {
   Form,
   FormControl,

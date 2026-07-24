@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus } from "@/lib/enums";
 
 export function OrderStatusActions({ orderId, currentStatus }: { orderId: string, currentStatus: OrderStatus }) {
   const [status, setStatus] = useState<OrderStatus>(currentStatus);
