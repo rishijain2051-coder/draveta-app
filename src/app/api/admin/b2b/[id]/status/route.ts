@@ -91,10 +91,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         html: `
           <h2>Welcome to the Draveta Furniture Trade Program!</h2>
           <p>Your application has been approved.</p>
-          <p><strong>Login URL:</strong> https://dravetafurniture.com/auth/login</p>
+          <p><strong>Login URL:</strong> https://dravetafurniture.com/login</p>
           <p><strong>Email:</strong> ${application.email}</p>
           <p><strong>Temporary Password:</strong> ${result.tempPassword}</p>
-          <p>Please log in and change your password immediately.</p>
+          <p>Keep these credentials safe — sign in to see your trade pricing and place order requests.</p>
         `,
       });
     } else if (resend && status === "REJECTED") {
@@ -110,7 +110,16 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       });
     }
 
-    return NextResponse.json({ success: true, status: result.updatedApp.status });
+    return NextResponse.json({
+      success: true,
+      status: result.updatedApp.status,
+      // Returned so the admin UI can display the one-time password (email
+      // delivery is optional). Only present on approval.
+      credentials:
+        status === "APPROVED" && result.tempPassword
+          ? { email: application.email, password: result.tempPassword }
+          : null,
+    });
   } catch (error) {
     console.error("B2B Status Update Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

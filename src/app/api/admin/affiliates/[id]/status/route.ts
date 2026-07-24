@@ -53,6 +53,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       where: { email: application.email }
     });
 
+    // Generated inside the transaction, surfaced to the admin UI + email.
+    const uniqueCode = generatePromoCode(application.name);
+
     await db.$transaction(async (tx) => {
       // 1. Update application status
       await tx.affiliateApplication.update({
@@ -60,12 +63,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         data: { status: "APPROVED" }
       });
 
-      // 2. Create User if doesn't exist
+      // 2. Create the linked user (required by AffiliateProfile). Affiliates are
+      // admin-managed and do not sign in, so this account is not used for login.
       if (!user) {
-        // Generate a random password for new affiliates (they can reset it later)
-        const rawPassword = Math.random().toString(36).slice(-8);
-        const hashedPassword = await bcrypt.hash(rawPassword, 10);
-        
+        const hashedPassword = await bcrypt.hash(
+          Math.random().toString(36).slice(-12),
+          10
+        );
         user = await tx.user.create({
           data: {
             name: application.name,
@@ -74,13 +78,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             role: "AFFILIATE",
           }
         });
-        
-        // Normally we would email the rawPassword to the user here
       }
 
       // 3. Create Affiliate Profile
-      const uniqueCode = generatePromoCode(application.name);
-      
       await tx.affiliateProfile.create({
         data: {
           applicationId: id,
@@ -92,17 +92,22 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       });
     });
 
-    // Send email notification
+    // Send email notification (the affiliate uses the code; there is no login).
     if (resend) {
       await resend.emails.send({
         from: "Draveta Affiliates <onboarding@resend.dev>",
         to: [application.email],
         subject: "Your Draveta Affiliate Application is Approved!",
-        html: `<p>Welcome to the Draveta Affiliate Program. Your promo code has been generated. Log in to your dashboard to view it.</p>`
+        html: `
+          <h2>Welcome to the Draveta Affiliate Program!</h2>
+          <p>Your application has been approved. Your promo code is:</p>
+          <p style="font-size:22px;font-weight:bold;letter-spacing:2px;">${uniqueCode}</p>
+          <p>Share it with your audience — they get a discount, and you earn commission on each redemption. Our team tracks redemptions and settles your commission with you each month.</p>
+        `
       });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, code: uniqueCode });
   } catch (error) {
     console.error("Affiliate Approval Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

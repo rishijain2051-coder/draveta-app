@@ -386,10 +386,18 @@ async function main() {
       estimatedVolume: "Rs 2-5 Lakh / quarter",
     },
   ] as const;
+  // Make the demo re-runnable: if these were approved during a previous demo,
+  // remove the account/user that approval created and reset them to PENDING.
+  const pendingIds = pendingApps.map((a) => a.id);
+  const pendingEmails = pendingApps.map((a) => a.email);
+  await prisma.b2BAccount.deleteMany({
+    where: { applicationId: { in: pendingIds } },
+  });
+  await prisma.user.deleteMany({ where: { email: { in: pendingEmails } } });
   for (const a of pendingApps) {
     await prisma.b2BApplication.upsert({
       where: { id: a.id },
-      update: {},
+      update: { status: "PENDING", reviewedById: null, reviewedAt: null },
       create: { ...a, status: "PENDING" },
     });
   }
