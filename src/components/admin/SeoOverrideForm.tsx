@@ -41,11 +41,11 @@ export function SeoOverrideForm({ initialData, onSuccess, trigger }: SeoOverride
 
   const form = useForm<SeoOverrideFormValues>({
     resolver: zodResolver(seoOverrideSchema),
-    defaultValues: initialData || {
-      pagePath: "/",
-      metaTitle: "",
-      metaDescription: "",
-      ogImage: "",
+    defaultValues: {
+      pagePath: initialData?.pagePath ?? "/",
+      metaTitle: initialData?.metaTitle ?? "",
+      metaDescription: initialData?.metaDescription ?? "",
+      ogImage: initialData?.ogImage ?? "",
     },
   });
 

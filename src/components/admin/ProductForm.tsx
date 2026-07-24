@@ -52,18 +52,19 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: initialData || {
-      name: "",
-      slug: "",
-      description: "",
-      categoryId: "",
-      basePrice: 0,
-      amazonUrl: "",
-      etsyUrl: "",
-      metaTitle: "",
-      metaDescription: "",
-      ogImage: "",
-      status: "DRAFT",
+    // Controlled inputs can't take null, so coalesce every optional DB field to "".
+    defaultValues: {
+      name: initialData?.name ?? "",
+      slug: initialData?.slug ?? "",
+      description: initialData?.description ?? "",
+      categoryId: initialData?.categoryId ?? "",
+      basePrice: initialData?.basePrice ?? 0,
+      amazonUrl: initialData?.amazonUrl ?? "",
+      etsyUrl: initialData?.etsyUrl ?? "",
+      metaTitle: initialData?.metaTitle ?? "",
+      metaDescription: initialData?.metaDescription ?? "",
+      ogImage: initialData?.ogImage ?? "",
+      status: initialData?.status ?? "DRAFT",
     },
   });
 
@@ -156,11 +157,16 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
                     <FormLabel>Category</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
+                          <SelectValue placeholder="Select a category">
+                            {(value: string) =>
+                              categories.find((c) => c.id === value)?.name ??
+                              "Select a category"
+                            }
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>

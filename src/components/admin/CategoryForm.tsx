@@ -40,11 +40,11 @@ export function CategoryForm({ initialData, onSuccess, trigger }: CategoryFormPr
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
-    defaultValues: initialData || {
-      name: "",
-      slug: "",
-      imageUrl: "",
-      displayOrder: 0,
+    defaultValues: {
+      name: initialData?.name ?? "",
+      slug: initialData?.slug ?? "",
+      imageUrl: initialData?.imageUrl ?? "",
+      displayOrder: initialData?.displayOrder ?? 0,
     },
   });
 
