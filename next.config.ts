@@ -21,6 +21,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.r2.dev",
       },
+      {
+        // Google Drive share links (converted to the direct thumbnail URL).
+        protocol: "https",
+        hostname: "drive.google.com",
+      },
+      {
+        // Google's image CDN that Drive thumbnails redirect to.
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
     ],
   },
 };

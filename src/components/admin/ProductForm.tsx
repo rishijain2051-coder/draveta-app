@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
+import { toDirectImageUrl } from "@/lib/images";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -48,8 +49,6 @@ interface ProductFormProps {
 
 export function ProductForm({ initialData, categories }: ProductFormProps) {
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const form = useForm<ProductFormValues>({
@@ -70,30 +69,6 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
     },
   });
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-      form.setValue("ogImage", data.url, { shouldValidate: true });
-      toast.success(
-        data.placeholder
-          ? "Uploaded a placeholder — add R2 keys for real uploads"
-          : "Image uploaded"
-      );
-    } catch {
-      toast.error("Image upload failed");
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
-  };
-
   const generateSlug = (name: string) => {
     return name
       .toLowerCase()
@@ -104,6 +79,7 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
   const onSubmit = async (data: ProductFormValues) => {
     try {
       setLoading(true);
+      if (data.ogImage) data.ogImage = toDirectImageUrl(data.ogImage);
       const url = initialData
         ? `/api/products/${initialData.id}`
         : "/api/products";
@@ -256,12 +232,12 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
                 name="ogImage"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Product Image</FormLabel>
+                    <FormLabel>Product Image (link)</FormLabel>
                     <div className="flex items-start gap-4">
                       {field.value ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={field.value}
+                          src={toDirectImageUrl(field.value)}
                           alt="Product preview"
                           className="h-24 w-24 shrink-0 rounded-md border object-cover"
                         />
@@ -270,29 +246,20 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
                           No image
                         </div>
                       )}
-                      <div className="flex-1 space-y-2">
+                      <div className="flex-1 space-y-1">
                         <FormControl>
                           <Input
-                            placeholder="https://... (or upload a file)"
+                            placeholder="Paste an image link (Unsplash, a CDN, or a Google Drive share link)"
                             {...field}
+                            onChange={(e) =>
+                              field.onChange(toDirectImageUrl(e.target.value))
+                            }
                           />
                         </FormControl>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={handleImageUpload}
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          disabled={uploading}
-                          onClick={() => fileInputRef.current?.click()}
-                        >
-                          {uploading ? "Uploading..." : "Upload image"}
-                        </Button>
+                        <p className="text-xs text-muted-foreground">
+                          Google Drive: share the file as “Anyone with the link”,
+                          then paste the link — it’s converted automatically.
+                        </p>
                         <FormMessage />
                       </div>
                     </div>
