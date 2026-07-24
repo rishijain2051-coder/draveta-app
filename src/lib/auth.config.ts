@@ -23,6 +23,9 @@ declare module "@auth/core/jwt" {
 }
 
 export const authConfig = {
+  // Trust the deployment host (required on Vercel / behind a proxy so Auth.js
+  // accepts the forwarded host instead of throwing UntrustedHost).
+  trustHost: true,
   session: { strategy: "jwt" },
   pages: {
     signIn: "/login",
