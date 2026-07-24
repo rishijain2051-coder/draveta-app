@@ -22,9 +22,7 @@ export function AdminBreadcrumbs() {
     <Breadcrumb className="mb-6">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/admin">Dashboard</Link>
-          </BreadcrumbLink>
+          <BreadcrumbLink render={<Link href="/admin">Dashboard</Link>} />
         </BreadcrumbItem>
         {paths.slice(1).map((segment, index) => {
           const isLast = index === paths.length - 2;
@@ -40,9 +38,7 @@ export function AdminBreadcrumbs() {
                 {isLast ? (
                   <BreadcrumbPage>{title}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink asChild>
-                    <Link href={href}>{title}</Link>
-                  </BreadcrumbLink>
+                  <BreadcrumbLink render={<Link href={href}>{title}</Link>} />
                 )}
               </BreadcrumbItem>
             </React.Fragment>
