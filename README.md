@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Draveta Furniture
 
-## Getting Started
+Draveta Furniture is a solid-wood furniture brand site. It is a storefront that never takes payment: retail (B2C) buyers browse the catalog and are routed out to **Amazon.in** and **Etsy** to purchase. Approved wholesale (B2B) buyers get tiered wholesale pricing and submit **Order Requests** instead of checking out. Affiliates are admin-managed and promote the brand with promo codes tracked by the team.
 
-First, run the development server:
+> The app lives in the [`draveta-app/`](.) subfolder of the repository.
+
+## Tech stack
+
+- **Next.js 16** — App Router, Turbopack
+- **React 19**
+- **Prisma 7** — driver adapter via `@prisma/adapter-pg`
+- **Supabase Postgres** — database
+- **NextAuth v5** — credentials provider, JWT sessions
+- **Tailwind CSS v4** + **shadcn/ui** — styling and components
+- **Resend** — transactional email
+- **Vercel** — deployment
+
+## Getting started
+
+The application code is in the `draveta-app/` subfolder, so start there.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd draveta-app
+npm install
+cp .env.example .env       # then fill in the values (see .env.example for notes)
+npx prisma generate        # generate the Prisma Client
+npm run db:seed            # seed demo data (products, users, B2B/affiliate demo)
+npm run dev                # start the dev server on http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Demo logins
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Seeded by `npm run db:seed`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Role | Email | Password |
+| ---- | ----- | -------- |
+| Admin | `admin@draveta.com` | `admin123` |
+| B2B | `b2b@draveta.com` | `b2bdemo123` |
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Script | Command | Description |
+| ------ | ------- | ----------- |
+| `dev` | `next dev` | Start the development server |
+| `build` | `next build` | Build for production |
+| `start` | `next start` | Run the production build |
+| `lint` | `eslint` | Lint the codebase |
+| `test` | `vitest run` | Run the unit test suite |
+| `db:seed` | `npx tsx prisma/seed.ts` | Seed the database with demo data |
+| `db:generate` | `prisma generate` | Generate the Prisma Client |
+| `db:push` | `prisma db push` | Push the schema to the database |
+| `db:studio` | `prisma studio` | Open Prisma Studio |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment (Vercel)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Set the project **Root Directory** to `draveta-app` (the app is not at the repo root).
+- Set **`DATABASE_URL`** to the Supabase **transaction pooler** URL (port **6543**). Do **not** use the direct `db.<ref>.supabase.co` host — it is IPv6-only and unreachable from Vercel.
+- Set **`AUTH_SECRET`** (generate with `openssl rand -base64 32`).
+- A `postinstall` hook runs `prisma generate` automatically on install, so the Prisma Client is available at build time.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [`.env.example`](.env.example) for the full list of environment variables and notes.
