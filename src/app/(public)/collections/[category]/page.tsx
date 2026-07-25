@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { ProductCard } from "@/components/products/ProductCard";
+import { Reveal } from "@/components/motion/reveal";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
@@ -56,19 +57,21 @@ export default async function CategoryPage({
       {/* Header */}
       <div className="bg-[#faf8f4] border-b border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-          <nav className="flex items-center text-xs uppercase tracking-wider text-stone-500 mb-6">
-            <Link href="/" className="hover:text-stone-900 transition-colors">Home</Link>
-            <ChevronRight className="h-3.5 w-3.5 mx-2" />
-            <Link href="/collections" className="hover:text-stone-900 transition-colors">Collections</Link>
-            <ChevronRight className="h-3.5 w-3.5 mx-2" />
-            <span className="text-stone-900">{categoryData.name}</span>
-          </nav>
-          <h1 className="font-serif text-4xl md:text-6xl tracking-tight text-stone-900">
-            {categoryData.name}
-          </h1>
-          <p className="text-stone-500 mt-3">
-            {products.length} {products.length === 1 ? "piece" : "pieces"}
-          </p>
+          <Reveal>
+            <nav className="flex items-center text-xs uppercase tracking-wider text-stone-500 mb-6">
+              <Link href="/" className="hover:text-stone-900 transition-colors">Home</Link>
+              <ChevronRight className="h-3.5 w-3.5 mx-2" />
+              <Link href="/collections" className="hover:text-stone-900 transition-colors">Collections</Link>
+              <ChevronRight className="h-3.5 w-3.5 mx-2" />
+              <span className="text-stone-900">{categoryData.name}</span>
+            </nav>
+            <h1 className="font-serif text-4xl md:text-6xl tracking-tight text-stone-900">
+              {categoryData.name}
+            </h1>
+            <p className="text-stone-500 mt-3">
+              {products.length} {products.length === 1 ? "piece" : "pieces"}
+            </p>
+          </Reveal>
         </div>
       </div>
 
@@ -104,19 +107,17 @@ export default async function CategoryPage({
             </p>
             <Link
               href="/collections"
-              className="inline-flex items-center border border-stone-900 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-stone-900 hover:bg-stone-900 hover:text-white transition-colors"
+              className="inline-flex items-center border border-stone-900 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-stone-900 hover:bg-stone-900 hover:text-white transition-colors active:scale-[0.97]"
             >
               Browse other collections
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-6">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                categorySlug={categoryData.slug}
-              />
+            {products.map((product, i) => (
+              <Reveal key={product.id} delay={(i % 4) * 0.07}>
+                <ProductCard product={product} categorySlug={categoryData.slug} />
+              </Reveal>
             ))}
           </div>
         )}

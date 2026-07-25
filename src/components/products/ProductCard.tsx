@@ -25,7 +25,7 @@ export function ProductCard({ product, categorySlug }: ProductCardProps) {
   return (
     <Link
       href={`/collections/${categorySlug}/${product.slug}`}
-      className="group block"
+      className="group block transition-transform duration-300 ease-out hover:-translate-y-1"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm bg-stone-100 mb-4">
         {product.ogImage ? (
