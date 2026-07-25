@@ -37,10 +37,18 @@ async function main() {
   console.log("Seeding database...");
 
   // ─── Admin ────────────────────────────────────────────────
-  const adminPassword = await bcrypt.hash("admin123", 12);
+  // Password comes from ADMIN_PASSWORD so a real database is never seeded with a
+  // known default. Falls back to admin123 for local/demo use (with a warning).
+  const adminPlain = process.env.ADMIN_PASSWORD || "admin123";
+  if (!process.env.ADMIN_PASSWORD) {
+    console.warn(
+      "⚠  ADMIN_PASSWORD not set — seeding admin with default 'admin123'. Set ADMIN_PASSWORD before seeding a production database."
+    );
+  }
+  const adminPassword = await bcrypt.hash(adminPlain, 12);
   const admin = await prisma.user.upsert({
     where: { email: "admin@draveta.com" },
-    update: {},
+    update: { passwordHash: adminPassword },
     create: {
       email: "admin@draveta.com",
       name: "Draveta Admin",

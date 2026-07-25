@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import {
   Package,
   Users,
@@ -7,6 +8,7 @@ import {
   Search,
   LayoutDashboard,
 } from "lucide-react";
+import { auth } from "@/lib/auth";
 import { Separator } from "@/components/ui/separator";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 
@@ -21,11 +23,18 @@ const navItems = [
   { href: "/admin/seo", label: "SEO", icon: Search },
 ];
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Defense in depth: proxy.ts already gates /admin, but enforce here too so a
+  // proxy misconfig or a route outside the matcher can never expose the CMS.
+  const session = await auth();
+  if (!session?.user || session.user.role !== "ADMIN") {
+    redirect("/login");
+  }
+
   return (
     <div className="flex min-h-screen">
       <aside className="w-64 border-r bg-muted/40 p-4 flex flex-col gap-2">

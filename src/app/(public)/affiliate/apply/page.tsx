@@ -25,6 +25,7 @@ const applySchema = z.object({
   phone: z.string().optional(),
   socialUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   audienceSize: z.string().optional(),
+  hp_field: z.string().optional(),
 });
 
 type ApplyFormValues = z.infer<typeof applySchema>;
@@ -41,6 +42,7 @@ export default function AffiliateApplyPage() {
       phone: "",
       socialUrl: "",
       audienceSize: "",
+      hp_field: "",
     },
   });
 
@@ -93,6 +95,15 @@ export default function AffiliateApplyPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Honeypot: hidden from users, catches bots */}
+              <input
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hidden"
+                {...form.register("hp_field")}
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}

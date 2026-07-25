@@ -1,39 +1,82 @@
 export const metadata = {
   title: "Shipping & Returns - Draveta Furniture",
-  description: "Information regarding shipping timelines, delivery costs, and our return policy.",
+  description:
+    "How shipping and returns work for retail (Amazon/Etsy) orders and for wholesale/trade orders placed directly with Draveta.",
 };
 
 export default function ShippingReturnsPage() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-4xl">
-      <h1 className="text-4xl font-bold tracking-tight mb-8">Shipping & Returns</h1>
-      
-      <div className="prose prose-lg dark:prose-invert">
-        <h2>Shipping Policy</h2>
+      <h1 className="text-4xl font-bold tracking-tight mb-4">
+        Shipping &amp; Returns
+      </h1>
+      <p className="text-muted-foreground mb-10">
+        How your order is shipped and returned depends on where you buy. Draveta
+        does not sell or take payment directly on this website — retail purchases
+        are completed on Amazon or Etsy, and wholesale orders are invoiced and
+        shipped by us.
+      </p>
+
+      <div className="prose prose-lg dark:prose-invert max-w-none">
+        <h2>Retail orders (Amazon &amp; Etsy)</h2>
         <p>
-          At Draveta Furniture, we take great care in packaging and shipping your solid wood furniture to ensure it arrives in pristine condition.
+          When you tap <strong>“Buy on Amazon”</strong> or{" "}
+          <strong>“Buy on Etsy”</strong>, your purchase, payment, delivery, and
+          returns are handled entirely by that marketplace under{" "}
+          <em>their</em> policies — not this page.
         </p>
         <ul>
-          <li><strong>Processing Time:</strong> In-stock items typically ship within 3-5 business days. Made-to-order or custom pieces may take 4-6 weeks to craft before shipping.</li>
-          <li><strong>Shipping Costs:</strong> Shipping costs are calculated at checkout based on the delivery location and the weight of the items.</li>
-          <li><strong>Delivery Methods:</strong> We partner with specialized furniture carriers for large items to ensure safe handling. Small items may be shipped via standard parcel services.</li>
+          <li>
+            <strong>Shipping timelines &amp; costs</strong> are shown at checkout
+            on Amazon/Etsy and depend on the seller and your location.
+          </li>
+          <li>
+            <strong>Returns &amp; refunds</strong> follow the marketplace&apos;s
+            return window and process. Start a return from your Amazon/Etsy order
+            history, not from Draveta.
+          </li>
+          <li>
+            <strong>Damaged in transit?</strong> Report it through the
+            marketplace&apos;s damage/replacement flow within their stated window.
+          </li>
         </ul>
 
-        <h2>Return Policy</h2>
+        <h2>Wholesale &amp; trade orders (direct from Draveta)</h2>
         <p>
-          We want you to be completely satisfied with your purchase. If for any reason you are not, we accept returns under the following conditions:
+          Approved{" "}
+          <a href="/b2b/apply">trade accounts</a> place Order Requests through the
+          B2B portal. These are fulfilled directly by Draveta against an invoice,
+          and the terms below apply.
         </p>
         <ul>
-          <li><strong>Timeframe:</strong> Returns must be initiated within 14 days of delivery.</li>
-          <li><strong>Condition:</strong> Items must be returned in their original condition and packaging. Used or damaged items (unless damaged in transit) are not eligible for a refund.</li>
-          <li><strong>Restocking Fee:</strong> A 15% restocking fee applies to all returned furniture.</li>
-          <li><strong>Return Shipping:</strong> Customers are responsible for return shipping costs.</li>
-          <li><strong>Custom Orders:</strong> Custom or made-to-order pieces are final sale and cannot be returned.</li>
+          <li>
+            <strong>Lead time:</strong> In-stock lines typically dispatch within
+            3–5 business days of a confirmed invoice. Made-to-order and contract
+            volumes are quoted per order (commonly 4–6 weeks).
+          </li>
+          <li>
+            <strong>Freight:</strong> Delivery is quoted on the invoice based on
+            destination, volume, and access. Large items ship via specialised
+            furniture carriers.
+          </li>
+          <li>
+            <strong>Inspection:</strong> Please inspect on delivery and note any
+            damage on the carrier&apos;s receipt. Report issues with photos within
+            48 hours of delivery.
+          </li>
+          <li>
+            <strong>Returns:</strong> Standard catalogue items may be returned in
+            original condition within 14 days of delivery; return freight and a
+            restocking fee may apply. Custom, made-to-order, and contract pieces
+            are non-returnable.
+          </li>
         </ul>
 
-        <h2>Damaged Items</h2>
+        <h2>Questions?</h2>
         <p>
-          Please inspect your furniture immediately upon delivery. If you notice any damage, please note it on the delivery receipt and contact us within 48 hours with photos of the damage and packaging. We will work swiftly to resolve the issue.
+          For anything about a wholesale order, <a href="/contact">contact us</a>.
+          For a retail order, please reach out through the Amazon or Etsy order
+          you placed so the marketplace can assist you directly.
         </p>
       </div>
     </div>

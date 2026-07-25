@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 import { Resend } from "resend";
+import { escapeHtml } from "@/lib/security";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
@@ -44,6 +45,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         where: { id },
         data: { status: "REJECTED" }
       });
+      // Parity with the B2B flow: notify the applicant of the decision.
+      if (resend) {
+        await resend.emails.send({
+          from: "Draveta Affiliates <onboarding@resend.dev>",
+          to: [application.email],
+          subject: "Update on your Draveta affiliate application",
+          html: `
+            <p>Hi ${escapeHtml(application.name)},</p>
+            <p>Thank you for your interest in the Draveta Affiliate Program. After review, we're unable to approve your application at this time.</p>
+            <p>You're welcome to reapply in the future as your audience grows. Thank you again for reaching out.</p>
+          `
+        });
+      }
       return NextResponse.json({ success: true });
     }
 
