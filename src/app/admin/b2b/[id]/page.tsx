@@ -87,6 +87,55 @@ export default async function B2BApplicationReviewPage({ params }: { params: Pro
                   <p className="text-sm font-medium text-muted-foreground">Phone</p>
                   <p className="text-base">{application.phone}</p>
                 </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Designation</p>
+                  <p className="text-base">{application.contactDesignation || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div>
+              <CardTitle className="text-lg mb-4">Sourcing &amp; Additional Details</CardTitle>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Year Established</p>
+                  <p className="text-base">{application.yearEstablished || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Delivery Location</p>
+                  <p className="text-base">
+                    {[application.deliveryCity, application.deliveryState]
+                      .filter(Boolean)
+                      .join(", ") || "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Estimated Volume</p>
+                  <p className="text-base">{application.estimatedVolume || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Order Frequency</p>
+                  <p className="text-base">{application.orderFrequency || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Heard About Us</p>
+                  <p className="text-base">{application.heardAbout || "N/A"}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-sm font-medium text-muted-foreground">Categories of Interest</p>
+                  <p className="text-base">
+                    {Array.isArray(application.categoriesInterested) &&
+                    application.categoriesInterested.length
+                      ? application.categoriesInterested.join(", ")
+                      : "N/A"}
+                  </p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-sm font-medium text-muted-foreground">Current Suppliers</p>
+                  <p className="text-base">{application.currentSuppliers || "N/A"}</p>
+                </div>
               </div>
             </div>
           </CardContent>
