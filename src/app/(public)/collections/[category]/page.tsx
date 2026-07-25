@@ -4,19 +4,25 @@ import { ProductCard } from "@/components/products/ProductCard";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}) {
   const { category } = await params;
-  const categoryData = await db.category.findUnique({
-    where: { slug: category },
-  });
-
+  const categoryData = await db.category.findUnique({ where: { slug: category } });
   if (!categoryData) return { title: "Not Found" };
-
   return {
     title: `${categoryData.name} - Draveta Furniture`,
     description: `Browse our ${categoryData.name} collection.`,
   };
 }
+
+const SORTS = [
+  { key: "newest", label: "Newest" },
+  { key: "price-asc", label: "Price: low to high" },
+  { key: "price-desc", label: "Price: high to low" },
+];
 
 export default async function CategoryPage({
   params,
@@ -28,85 +34,93 @@ export default async function CategoryPage({
   const { category } = await params;
   const { sort } = await searchParams;
 
-  const categoryData = await db.category.findUnique({
-    where: { slug: category },
-  });
+  const categoryData = await db.category.findUnique({ where: { slug: category } });
+  if (!categoryData) notFound();
 
-  if (!categoryData) {
-    notFound();
-  }
-
-  // Determine sorting logic
-  let orderBy: any = { createdAt: "desc" };
-  if (sort === "price-asc") orderBy = { basePrice: "asc" };
-  if (sort === "price-desc") orderBy = { basePrice: "desc" };
+  const orderBy =
+    sort === "price-asc"
+      ? { basePrice: "asc" as const }
+      : sort === "price-desc"
+        ? { basePrice: "desc" as const }
+        : { createdAt: "desc" as const };
 
   const products = await db.product.findMany({
-    where: {
-      categoryId: categoryData.id,
-      status: "PUBLISHED",
-    },
+    where: { categoryId: categoryData.id, status: "PUBLISHED" },
     orderBy,
   });
 
+  const activeSort = typeof sort === "string" ? sort : "newest";
+
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Breadcrumbs */}
-      <nav className="flex items-center text-sm text-muted-foreground mb-8">
-        <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
-        <ChevronRight className="h-4 w-4 mx-2" />
-        <Link href="/collections" className="hover:text-foreground transition-colors">Collections</Link>
-        <ChevronRight className="h-4 w-4 mx-2" />
-        <span className="text-foreground">{categoryData.name}</span>
-      </nav>
-
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-2">{categoryData.name}</h1>
-        </div>
-
-        {/* Basic Sort Dropdown (Server Component logic via links for simplicity, in a real app this might be a Client Component using router.push) */}
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground">Sort by:</span>
-          <div className="flex border rounded-md overflow-hidden">
-            <Link 
-              href={`/collections/${category}?sort=newest`}
-              className={`px-3 py-1.5 hover:bg-muted ${(!sort || sort === 'newest') ? 'bg-muted font-medium' : ''}`}
-            >
-              Newest
-            </Link>
-            <Link 
-              href={`/collections/${category}?sort=price-asc`}
-              className={`px-3 py-1.5 hover:bg-muted border-l ${sort === 'price-asc' ? 'bg-muted font-medium' : ''}`}
-            >
-              Price: Low to High
-            </Link>
-            <Link 
-              href={`/collections/${category}?sort=price-desc`}
-              className={`px-3 py-1.5 hover:bg-muted border-l ${sort === 'price-desc' ? 'bg-muted font-medium' : ''}`}
-            >
-              Price: High to Low
-            </Link>
-          </div>
+    <div>
+      {/* Header */}
+      <div className="bg-[#faf8f4] border-b border-border">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+          <nav className="flex items-center text-xs uppercase tracking-wider text-stone-500 mb-6">
+            <Link href="/" className="hover:text-stone-900 transition-colors">Home</Link>
+            <ChevronRight className="h-3.5 w-3.5 mx-2" />
+            <Link href="/collections" className="hover:text-stone-900 transition-colors">Collections</Link>
+            <ChevronRight className="h-3.5 w-3.5 mx-2" />
+            <span className="text-stone-900">{categoryData.name}</span>
+          </nav>
+          <h1 className="font-serif text-4xl md:text-6xl tracking-tight text-stone-900">
+            {categoryData.name}
+          </h1>
+          <p className="text-stone-500 mt-3">
+            {products.length} {products.length === 1 ? "piece" : "pieces"}
+          </p>
         </div>
       </div>
 
-      {products.length === 0 ? (
-        <div className="text-center py-24 bg-muted/30 rounded-lg border border-dashed">
-          <h3 className="text-lg font-medium mb-2">No products found</h3>
-          <p className="text-muted-foreground">We couldn't find any published products in this category.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
-          {products.map((product) => (
-            <ProductCard 
-              key={product.id} 
-              product={product} 
-              categorySlug={categoryData.slug}
-            />
-          ))}
-        </div>
-      )}
+      {/* Sort + grid */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        {products.length > 0 && (
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 justify-end mb-10 text-sm">
+            <span className="text-stone-400 mr-auto uppercase tracking-wider text-xs">Sort</span>
+            {SORTS.map((s) => {
+              const isActive = activeSort === s.key;
+              return (
+                <Link
+                  key={s.key}
+                  href={`/collections/${category}?sort=${s.key}`}
+                  className={`pb-0.5 border-b transition-colors ${
+                    isActive
+                      ? "border-stone-900 text-stone-900 font-medium"
+                      : "border-transparent text-stone-500 hover:text-stone-900"
+                  }`}
+                >
+                  {s.label}
+                </Link>
+              );
+            })}
+          </div>
+        )}
+
+        {products.length === 0 ? (
+          <div className="text-center py-28">
+            <h3 className="font-serif text-2xl text-stone-900 mb-3">Nothing here yet</h3>
+            <p className="text-stone-500 mb-8">
+              We&apos;re still crafting pieces for this collection. Check back soon.
+            </p>
+            <Link
+              href="/collections"
+              className="inline-flex items-center border border-stone-900 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-stone-900 hover:bg-stone-900 hover:text-white transition-colors"
+            >
+              Browse other collections
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-6">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                categorySlug={categoryData.slug}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

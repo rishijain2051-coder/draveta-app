@@ -2,13 +2,13 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="bg-muted py-12 mt-auto">
+    <footer className="bg-[#faf8f4] border-t border-border py-14 mt-auto">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
           <div className="md:col-span-1">
             <Link href="/" className="inline-block mb-4">
-              <span className="text-xl font-bold tracking-tight">Draveta Furniture</span>
+              <span className="font-serif text-2xl tracking-tight text-stone-900">Draveta</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
               Solid wood furniture built for the Indian market, crafted to last generations.
