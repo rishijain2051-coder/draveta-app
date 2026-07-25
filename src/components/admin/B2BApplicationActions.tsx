@@ -78,7 +78,7 @@ export function B2BApplicationActions({
         <Button
           onClick={() => handleAction("APPROVED")}
           disabled={loading}
-          className="w-full bg-green-600 hover:bg-green-700 text-white"
+          className="w-full bg-green-600 hover:bg-green-700 text-[#faf8f4]"
         >
           <CheckCircle className="mr-2 h-4 w-4" />
           Approve Account

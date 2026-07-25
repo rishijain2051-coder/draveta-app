@@ -76,13 +76,13 @@ export function Hero({
           </motion.p>
           <motion.h1
             variants={item}
-            className="font-serif text-white text-5xl md:text-7xl lg:text-8xl leading-[1.02] tracking-tight mb-6"
+            className="font-serif text-[#faf8f4] text-5xl md:text-7xl lg:text-8xl leading-[1.02] tracking-tight mb-6"
           >
             {headline}
           </motion.h1>
           <motion.p
             variants={item}
-            className="text-lg md:text-xl text-white/85 max-w-xl mb-10 leading-relaxed"
+            className="text-lg md:text-xl text-[#faf8f4]/85 max-w-xl mb-10 leading-relaxed"
           >
             {subline}
           </motion.p>
@@ -90,7 +90,7 @@ export function Hero({
             <Magnetic>
               <Link
                 href={ctaUrl}
-                className="inline-flex items-center gap-2 bg-white text-stone-900 px-8 py-4 text-xs font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-stone-100 active:scale-[0.97]"
+                className="inline-flex items-center gap-2 bg-[#faf8f4] text-stone-900 px-8 py-4 text-xs font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-stone-100 active:scale-[0.97]"
               >
                 {ctaText}
                 <ArrowRight className="h-4 w-4" />
@@ -98,7 +98,7 @@ export function Hero({
             </Magnetic>
             <Link
               href="/b2b/apply"
-              className="group inline-flex items-center gap-1.5 text-sm font-medium text-white/90 border-b border-white/40 pb-1 transition-colors hover:text-white hover:border-white"
+              className="group inline-flex items-center gap-1.5 text-sm font-medium text-[#faf8f4]/90 border-b border-[#faf8f4]/40 pb-1 transition-colors hover:text-[#faf8f4] hover:border-[#faf8f4]"
             >
               Trade &amp; wholesale enquiries
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

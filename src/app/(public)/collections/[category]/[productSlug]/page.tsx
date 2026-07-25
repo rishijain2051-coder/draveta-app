@@ -108,7 +108,7 @@ export default async function ProductDetailPage({
   ) : null;
 
   return (
-    <div className="bg-white">
+    <div className="bg-[#faf8f4]">
       {/* Breadcrumb */}
       <div className="bg-[#faf8f4] border-b border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">

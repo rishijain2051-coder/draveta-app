@@ -146,10 +146,10 @@ export default async function HomePage() {
                       {/* gradient overlay fades in from bottom */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
                       <div className="absolute bottom-0 left-0 p-5 md:p-6">
-                        <h3 className="font-serif text-xl md:text-2xl text-white transition-transform duration-500 ease-out group-hover:-translate-y-1">
+                        <h3 className="font-serif text-xl md:text-2xl text-[#faf8f4] transition-transform duration-500 ease-out group-hover:-translate-y-1">
                           {cat.name}
                         </h3>
-                        <span className="mt-1 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/95 opacity-0 translate-y-2 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-y-0">
+                        <span className="mt-1 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#faf8f4]/95 opacity-0 translate-y-2 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-y-0">
                           Explore Category
                           <ArrowRight className="h-3.5 w-3.5" />
                         </span>
@@ -188,7 +188,7 @@ export default async function HomePage() {
                     Made to outlive trends.
                   </h2>
                 </Reveal>
-                <div className="divide-y divide-white/10">
+                <div className="divide-y divide-[#faf8f4]/10">
                   {pillars.map((pillar, index) => (
                     <Reveal key={index} delay={index * 0.1} y={16}>
                       <div className="flex gap-5 py-5">
@@ -274,7 +274,7 @@ export default async function HomePage() {
             <Magnetic>
               <Link
                 href="/b2b/apply"
-                className="inline-flex items-center gap-2 shrink-0 bg-[#e6cba8] text-stone-900 px-8 py-4 text-xs font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-white active:scale-[0.97]"
+                className="inline-flex items-center gap-2 shrink-0 bg-[#e6cba8] text-stone-900 px-8 py-4 text-xs font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-[#faf8f4] active:scale-[0.97]"
               >
                 Apply for trade pricing
                 <ArrowRight className="h-4 w-4" />

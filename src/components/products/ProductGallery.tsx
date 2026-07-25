@@ -76,7 +76,7 @@ export function ProductGallery({ images, primaryImage, productName }: ProductGal
 
       {/* Lightbox */}
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-        <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 border-none bg-transparent shadow-none [&>button]:text-white">
+        <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 border-none bg-transparent shadow-none [&>button]:text-[#faf8f4]">
           <div className="relative w-full h-[85vh] flex items-center justify-center">
             <Image
               src={activeImage.url}

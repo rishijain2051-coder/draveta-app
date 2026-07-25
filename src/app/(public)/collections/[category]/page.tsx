@@ -107,7 +107,7 @@ export default async function CategoryPage({
             </p>
             <Link
               href="/collections"
-              className="inline-flex items-center border border-stone-900 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-stone-900 hover:bg-stone-900 hover:text-white transition-colors active:scale-[0.97]"
+              className="inline-flex items-center border border-stone-900 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-stone-900 hover:bg-stone-900 hover:text-[#faf8f4] transition-colors active:scale-[0.97]"
             >
               Browse other collections
             </Link>
