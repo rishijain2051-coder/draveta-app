@@ -6,11 +6,20 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/motion/reveal";
 import { Marquee } from "@/components/motion/marquee";
 import { Magnetic } from "@/components/motion/magnetic";
-import { ParallaxImage } from "@/components/motion/parallax-image";
+import { Hero } from "@/components/home/hero";
 
 type Pillar = { title: string; description: string };
 
 const WOODS = ["Sheesham", "Teak", "Mango", "Acacia", "Solid Oak", "Rosewood"];
+
+// Editorial bento spans for the "Shop by room" grid (5 categories).
+const BENTO = [
+  "col-span-2 lg:col-span-2 lg:row-span-2", // featured (large)
+  "col-span-2 lg:col-span-2", // wide
+  "col-span-1", // square
+  "col-span-1", // square
+  "col-span-2 lg:col-span-4", // full-width banner
+];
 
 export default async function HomePage() {
   const [contentBlocks, categories, featured] = await Promise.all([
@@ -32,7 +41,7 @@ export default async function HomePage() {
   const headline = content["hero_headline"] || "Solid wood, honestly made.";
   const subline =
     content["hero_subline"] ||
-    "Heirloom-quality furniture for homes, hotels, and everyone in between.";
+    "Heirloom-quality solid wood furniture. Crafted for modern homes and luxury hospitality.";
   const ctaText = content["hero_cta_text"] || "Explore the Collection";
   const ctaUrl = content["hero_cta_url"] || "/collections";
   const mediaUrl = content["hero_media_url"] || "";
@@ -42,80 +51,55 @@ export default async function HomePage() {
     if (content["why_solid_wood_pillars"]) pillars = JSON.parse(content["why_solid_wood_pillars"]);
   } catch {}
 
-  const craftImage =
-    categories.find((c) => c.slug === "dining")?.imageUrl ||
-    categories[1]?.imageUrl ||
-    mediaUrl;
+  const bySlug = (slug: string) => categories.find((c) => c.slug === slug)?.imageUrl;
+  const philosophyImage = bySlug("bedroom") || featured[0]?.ogImage || mediaUrl;
+  const craftImage = bySlug("dining") || categories[1]?.imageUrl || mediaUrl;
 
   return (
     <div className="flex flex-col w-full">
       {/* ─────────── Hero ─────────── */}
-      <section className="relative w-full h-[calc(100vh-104px)] min-h-[560px] flex items-end overflow-hidden">
-        {mediaUrl ? (
-          <ParallaxImage src={mediaUrl} alt={headline} priority />
-        ) : (
-          <div className="absolute inset-0 bg-stone-200" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/10" />
+      <Hero
+        headline={headline}
+        subline={subline}
+        ctaText={ctaText}
+        ctaUrl={ctaUrl}
+        mediaUrl={mediaUrl}
+      />
 
-        <div className="relative z-10 w-full container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
-          <div className="max-w-3xl">
-            <Reveal delay={0.05} y={16}>
-              <p className="mb-5 text-xs font-medium uppercase tracking-[0.3em] text-[#e6cba8]">
-                The solid wood collection
+      {/* ─────────── Our philosophy (visual storytelling) ─────────── */}
+      <section className="bg-[#faf8f4] overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch">
+          <div className="relative min-h-[340px] lg:min-h-[580px] overflow-hidden order-1 lg:order-none">
+            {philosophyImage && (
+              <Image
+                src={philosophyImage}
+                alt="Solid wood craftsmanship"
+                fill
+                className="object-cover animate-[kenburns_22s_ease-in-out_infinite_alternate]"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#faf8f4]/10" />
+          </div>
+          <div className="flex items-center px-6 sm:px-12 lg:px-20 py-16 lg:py-28">
+            <Reveal>
+              <p className="mb-6 text-xs font-medium uppercase tracking-[0.3em] text-[#9c7a54]">
+                Our philosophy
               </p>
-            </Reveal>
-            <Reveal delay={0.12}>
-              <h1 className="font-serif text-white text-5xl md:text-7xl lg:text-8xl leading-[1.02] tracking-tight mb-6">
-                {headline}
-              </h1>
-            </Reveal>
-            <Reveal delay={0.22}>
-              <p className="text-lg md:text-xl text-white/85 max-w-xl mb-10 leading-relaxed">
-                {subline}
+              <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-800">
+                We build furniture from a single, honest material — solid
+                hardwood. No veneers, no shortcuts. Pieces meant to be repaired,
+                passed down, and lived with for a lifetime.
               </p>
-            </Reveal>
-            <Reveal delay={0.32}>
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-                <Magnetic>
-                  <Link
-                    href={ctaUrl}
-                    className="inline-flex items-center gap-2 bg-white text-stone-900 px-8 py-4 text-xs font-semibold uppercase tracking-[0.18em] transition-colors hover:bg-stone-100 active:scale-[0.97]"
-                  >
-                    {ctaText}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </Magnetic>
-                <Link
-                  href="/b2b/apply"
-                  className="group inline-flex items-center gap-1.5 text-sm font-medium text-white/90 border-b border-white/40 pb-1 transition-colors hover:text-white hover:border-white"
-                >
-                  Trade &amp; wholesale enquiries
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </Link>
+              <div className="mt-10 flex items-center gap-4 text-sm text-stone-500">
+                <span className="h-px w-10 bg-stone-400" />
+                Mortise-and-tenon joinery, hand-finished in our workshop
               </div>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ─────────── Brand statement ─────────── */}
-      <section className="bg-[#faf8f4] py-20 md:py-28">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <Reveal className="max-w-3xl mx-auto text-center">
-            <p className="mb-6 text-xs font-medium uppercase tracking-[0.3em] text-[#9c7a54]">
-              Our philosophy
-            </p>
-            <p className="font-serif text-2xl md:text-4xl leading-snug text-stone-800">
-              We build furniture from a single, honest material — solid hardwood.
-              No veneers, no shortcuts. Pieces meant to be repaired, passed down,
-              and lived with for a lifetime.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ─────────── Collections ─────────── */}
+      {/* ─────────── Shop by room (bento) ─────────── */}
       {categories.length > 0 && (
         <section className="py-20 md:py-28">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -137,33 +121,38 @@ export default async function HomePage() {
               </Link>
             </Reveal>
 
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-10">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 lg:auto-rows-[14rem]">
               {categories.map((cat, i) => (
                 <Reveal
                   key={cat.id}
-                  delay={(i % 3) * 0.08}
-                  className={i === 0 ? "col-span-2 lg:col-span-1" : ""}
+                  delay={(i % 4) * 0.06}
+                  className={`${BENTO[i] ?? "col-span-1"} h-full`}
                 >
-                  <Link href={`/collections/${cat.slug}`} className="group block">
-                    <div
-                      className={`relative overflow-hidden rounded-sm bg-stone-100 ${
-                        i === 0 ? "aspect-[16/10] lg:aspect-[4/5]" : "aspect-[4/5]"
-                      }`}
-                    >
+                  <Link
+                    href={`/collections/${cat.slug}`}
+                    className="group block h-full"
+                  >
+                    <div className="relative h-full min-h-[13rem] lg:min-h-0 overflow-hidden rounded-sm bg-stone-100">
                       {cat.imageUrl && (
                         <Image
                           src={cat.imageUrl}
                           alt={cat.name}
                           fill
-                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                          sizes="(max-width: 1024px) 50vw, 40vw"
+                          className="object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.04]"
                         />
                       )}
-                    </div>
-                    <div className="flex items-center justify-between mt-4">
-                      <h3 className="font-serif text-xl md:text-2xl text-stone-900 transition-colors group-hover:text-stone-500">
-                        {cat.name}
-                      </h3>
-                      <ArrowUpRight className="h-5 w-5 text-stone-400 transition-all group-hover:text-stone-900 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      {/* gradient overlay fades in from bottom */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
+                      <div className="absolute bottom-0 left-0 p-5 md:p-6">
+                        <h3 className="font-serif text-xl md:text-2xl text-white transition-transform duration-500 ease-out group-hover:-translate-y-1">
+                          {cat.name}
+                        </h3>
+                        <span className="mt-1 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/95 opacity-0 translate-y-2 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-y-0">
+                          Explore Category
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </span>
+                      </div>
                     </div>
                   </Link>
                 </Reveal>

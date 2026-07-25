@@ -140,3 +140,18 @@
   font-family: var(--font-fraunces), ui-serif, Georgia, serif;
   font-optical-sizing: auto;
 }
+
+/* Slow, looping zoom for editorial imagery (the "living" material feel). */
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[kenburns_22s_ease-in-out_infinite_alternate\] {
+    animation: none !important;
+  }
+}

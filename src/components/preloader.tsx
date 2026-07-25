@@ -1,69 +1,56 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 
 /**
- * Full-screen branded intro shown on the first load of a session. Renders on the
- * server (so there's no flash of unstyled content) and animates out on mount.
+ * Full-screen branded intro on first load of a session. Deliberately CSS-only:
+ * removal is driven by a timer (not an animation-complete callback), so it can
+ * never get stuck covering the site even if animations don't run.
  */
 export function Preloader() {
-  const [visible, setVisible] = useState(true);
+  const [hide, setHide] = useState(false);
+  const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem("draveta_intro")) {
-      setVisible(false);
-      return;
-    }
-    const t = setTimeout(() => {
-      setVisible(false);
+    const seen = sessionStorage.getItem("draveta_intro");
+    const showFor = seen ? 0 : 1700;
+
+    const t1 = setTimeout(() => {
+      setHide(true);
       sessionStorage.setItem("draveta_intro", "1");
-    }, 1900);
-    return () => clearTimeout(t);
+      window.dispatchEvent(new Event("draveta:intro-done"));
+    }, showFor);
+    const t2 = setTimeout(() => setRemoved(true), showFor + 750);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, []);
 
+  if (removed) return null;
+
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-[#faf8f4]"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
-        >
-          <motion.div
-            className="flex flex-col items-center gap-7"
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <motion.div
-              initial={{ rotate: -140, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Image src="/logo.png" alt="Draveta" width={80} height={80} priority />
-            </motion.div>
-            <div className="overflow-hidden">
-              <motion.span
-                className="block font-serif text-3xl tracking-tight text-stone-900"
-                initial={{ y: "120%" }}
-                animate={{ y: "0%" }}
-                transition={{ delay: 0.35, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              >
-                Draveta
-              </motion.span>
-            </div>
-            <motion.div
-              className="h-px bg-stone-900/30"
-              initial={{ width: 0 }}
-              animate={{ width: 120 }}
-              transition={{ delay: 0.6, duration: 0.9, ease: "easeInOut" }}
-            />
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div
+      className={`fixed inset-0 z-[200] flex items-center justify-center bg-[#faf8f4] transition-opacity duration-700 ease-in-out ${
+        hide ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`}
+    >
+      <div className="flex flex-col items-center gap-6 animate-in fade-in zoom-in-95 duration-700">
+        <Image
+          src="/logo.png"
+          alt="Draveta"
+          width={80}
+          height={80}
+          priority
+          className="animate-spin [animation-duration:6s]"
+        />
+        <span className="font-serif text-3xl tracking-tight text-stone-900">
+          Draveta
+        </span>
+        <span className="h-px w-24 bg-stone-900/25" />
+      </div>
+    </div>
   );
 }

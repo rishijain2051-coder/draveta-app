@@ -523,7 +523,7 @@ async function main() {
   const content: Record<string, string> = {
     hero_headline: "Solid wood, honestly made.",
     hero_subline:
-      "Heirloom-quality furniture for homes, hotels, and everyone in between.",
+      "Heirloom-quality solid wood furniture. Crafted for modern homes and luxury hospitality.",
     hero_media_url: img(IMG[11]),
     hero_cta_text: "Explore the Collection",
     hero_cta_url: "/collections",
