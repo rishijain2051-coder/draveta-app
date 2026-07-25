@@ -79,7 +79,7 @@ export default async function CategoryPage({
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {products.length > 0 && (
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 justify-end mb-10 text-sm">
-            <span className="text-stone-400 mr-auto uppercase tracking-wider text-xs">Sort</span>
+            <span className="text-stone-500 mr-auto uppercase tracking-wider text-xs">Sort</span>
             {SORTS.map((s) => {
               const isActive = activeSort === s.key;
               return (

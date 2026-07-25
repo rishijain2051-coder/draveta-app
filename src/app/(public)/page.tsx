@@ -73,8 +73,9 @@ export default async function HomePage() {
             {philosophyImage && (
               <Image
                 src={philosophyImage}
-                alt="Solid wood craftsmanship"
+                alt="A handcrafted Draveta solid wood piece in a styled interior"
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover animate-[kenburns_22s_ease-in-out_infinite_alternate]"
               />
             )}
@@ -170,8 +171,9 @@ export default async function HomePage() {
               {craftImage && (
                 <Image
                   src={craftImage}
-                  alt="Draveta craftsmanship"
+                  alt="Solid wood dining furniture handcrafted by Draveta"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover transition-transform duration-[1.2s] hover:scale-105"
                 />
               )}
@@ -281,6 +283,30 @@ export default async function HomePage() {
           </Reveal>
         </div>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                name: "Draveta Furniture",
+                url: "https://draveta-furnitures.vercel.app",
+                logo: "https://draveta-furnitures.vercel.app/logo.png",
+                description:
+                  "Premium solid wood furniture for homes, hotels, and commercial spaces, handcrafted in India.",
+              },
+              {
+                "@type": "WebSite",
+                name: "Draveta Furniture",
+                url: "https://draveta-furnitures.vercel.app",
+              },
+            ],
+          }),
+        }}
+      />
     </div>
   );
 }

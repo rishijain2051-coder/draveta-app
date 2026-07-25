@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 
 /** Infinite horizontal marquee. Renders children twice for a seamless loop. */
@@ -13,6 +13,17 @@ export function Marquee({
   duration?: number;
   className?: string;
 }) {
+  const reduce = useReducedMotion();
+
+  // Reduced motion: render a single, static, centered row (no scrolling).
+  if (reduce) {
+    return (
+      <div className={`flex flex-wrap items-center justify-center ${className ?? ""}`}>
+        {children}
+      </div>
+    );
+  }
+
   return (
     <div className={`group overflow-hidden ${className ?? ""}`}>
       <motion.div

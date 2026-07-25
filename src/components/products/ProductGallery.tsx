@@ -32,7 +32,9 @@ export function ProductGallery({ images, primaryImage, productName }: ProductGal
   return (
     <div className="flex flex-col gap-4">
       {/* Main Image */}
-      <div 
+      <button
+        type="button"
+        aria-label={`Zoom image of ${productName}`}
         className="relative aspect-square overflow-hidden rounded-lg bg-muted cursor-zoom-in"
         onClick={() => setLightboxOpen(true)}
       >
@@ -41,9 +43,10 @@ export function ProductGallery({ images, primaryImage, productName }: ProductGal
           alt={activeImage.altText || productName}
           fill
           priority
+          sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover"
         />
-      </div>
+      </button>
 
       {/* Thumbnails */}
       {galleryImages.length > 1 && (
@@ -51,6 +54,9 @@ export function ProductGallery({ images, primaryImage, productName }: ProductGal
           {galleryImages.map((img, idx) => (
             <button
               key={img.id}
+              type="button"
+              aria-label={`View image ${idx + 1} of ${productName}`}
+              aria-pressed={idx === activeIndex}
               onClick={() => setActiveIndex(idx)}
               className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-md bg-muted ${
                 idx === activeIndex ? "ring-2 ring-primary ring-offset-2" : "opacity-70 hover:opacity-100"
@@ -60,6 +66,7 @@ export function ProductGallery({ images, primaryImage, productName }: ProductGal
                 src={img.url}
                 alt={img.altText || `${productName} thumbnail ${idx + 1}`}
                 fill
+                sizes="80px"
                 className="object-cover"
               />
             </button>
@@ -75,6 +82,7 @@ export function ProductGallery({ images, primaryImage, productName }: ProductGal
               src={activeImage.url}
               alt={activeImage.altText || productName}
               fill
+              sizes="90vw"
               className="object-contain"
               quality={100}
             />

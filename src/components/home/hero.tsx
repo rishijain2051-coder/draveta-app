@@ -32,7 +32,7 @@ export function Hero({
     }
     const onDone = () => setReady(true);
     window.addEventListener("draveta:intro-done", onDone);
-    const fallback = setTimeout(() => setReady(true), 2600);
+    const fallback = setTimeout(() => setReady(true), 3400);
     return () => {
       window.removeEventListener("draveta:intro-done", onDone);
       clearTimeout(fallback);

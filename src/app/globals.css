@@ -150,8 +150,65 @@
     transform: scale(1.08);
   }
 }
+
+/* Branded intro (preloader) — a finite, self-completing entrance. */
+@keyframes introReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.55) rotate(-140deg);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes introUp {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes introLine {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 6rem;
+    opacity: 1;
+  }
+}
+
+/* Visible keyboard focus for all interactive elements (WCAG 2.4.7). */
+@layer base {
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+}
+
+/* Honor prefers-reduced-motion for all CSS animation/transition (WCAG 2.3.3). */
 @media (prefers-reduced-motion: reduce) {
-  .animate-\[kenburns_22s_ease-in-out_infinite_alternate\] {
-    animation: none !important;
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

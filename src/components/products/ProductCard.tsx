@@ -37,7 +37,7 @@ export function ProductCard({ product, categorySlug }: ProductCardProps) {
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-stone-400 text-sm">
+          <div className="absolute inset-0 flex items-center justify-center text-stone-500 text-sm">
             No image
           </div>
         )}
